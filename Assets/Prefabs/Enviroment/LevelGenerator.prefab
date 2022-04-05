@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1190446568137708098
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 96232842218632893}
+  - component: {fileID: 8630637871652083049}
+  m_Layer: 0
+  m_Name: LevelGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &96232842218632893
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190446568137708098}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8630637871652083049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1190446568137708098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70c6a85720040ca4ca56e2cfabad5358, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StartRoom: {fileID: 3509150892873625931, guid: e18f7e0945ebf1f4d8ce26f85ab54761, type: 3}
+  EndRoom: {fileID: 3509150892873625931, guid: 3cc5affe3a7260441b442247841b9874, type: 3}
+  desiredLevelComplexity: 15
+  desiredLevelTangents: 4
+  desiredTangentLength: 3
+  PLUS_ROOM: {fileID: 3383674476571069381, guid: ca90a8d87fa741d4aba7d830574765ed, type: 3}
+  SOUTH_NORTH: {fileID: 3383674476571069381, guid: fffb27abcbc315347b60cb91f868a959, type: 3}
+  NORTH_EAST: {fileID: 3383674476571069381, guid: 94fdc5eb5a7cde34a9bf4ea04e408fc3, type: 3}
+  NORTH_WEST: {fileID: 3383674476571069381, guid: 7b22e559583e8e94f89e973363d6db2c, type: 3}
+  SOUTH_EAST: {fileID: 3383674476571069381, guid: d0c6ad9a08b3ff9468fe2b8ffc5c7809, type: 3}
+  SOUTH_WEST: {fileID: 3383674476571069381, guid: 974537eeb36fbe54b9056d6a85139027, type: 3}
+  WEST_EAST: {fileID: 3383674476571069381, guid: d31673888c484c041b19f1d5f82181e5, type: 3}
+  WEST_EAST_NORTH: {fileID: 3383674476571069381, guid: a3cea15505c98da4fa0bbb46c128ef6c, type: 3}
+  WEST_EAST_SOUTH: {fileID: 3383674476571069381, guid: ce813da1c94cf494db49eb80bbeff4bd, type: 3}
+  NORTH_SOUTH_EAST: {fileID: 3383674476571069381, guid: ae0528297b2593d4fbf84e7547808ed9, type: 3}
+  NORTH_SOUTH_WEST: {fileID: 3383674476571069381, guid: 34dd736b170103f4389e0d9f1a3b16ca, type: 3}
+  CAP_NORTH: {fileID: 3383674476571069381, guid: 7af0dba0013e3174882ae4b89e676b0e, type: 3}
+  CAP_EAST: {fileID: 3383674476571069381, guid: 56a977cbd5dc0e94a98630054d4ae1cd, type: 3}
+  CAP_SOUTH: {fileID: 3383674476571069381, guid: f6b07673c528f9e47a7330c454706c50, type: 3}
+  CAP_WEST: {fileID: 3383674476571069381, guid: 4291aaa4f4e198a49ab8fc3a7cf5ca12, type: 3}
