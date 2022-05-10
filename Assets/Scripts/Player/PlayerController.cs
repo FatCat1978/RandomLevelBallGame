@@ -5,148 +5,149 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+	[Header("Camera Settings")]
+	public float TouchRayCastDist = 30;
+	public float CamInputScaler = 1;
 
-	public float CameraSensitivity = 45; //angle change per second
-	public float BallMaxMagnitude = 10; //under this we can give it a big ol' smackerooni. speed limit for non big hits!!
-	public float BallHitManaDrain = 10;
-	public float BallHitSpeed;
-	public float BallHitCooldown = 1; //how many seconds between hits???/
 
-	public float CameraScrollModifier = 1;
-
-	private long NextBallHit;
-
+	[Header("Ball Settings")]
+	public GameObject throwTowards; //what are we getting thrown towards?
+	public float maxThrowDistance = 5; //how far away can the mystical point be?
+	
+	public float throwScaler = 1;
+	public float exponentialScaler = 1;
 	//public bool TurningEnabled = true;
 
-	public HitModes HitModeUsed = HitModes.HitModeConstant; 
 
 	public GameObject BallHitReference; //don't edit this!!!
 
-	private bool spaceReleased = true;  //have we let go of space? Only used for "classic" hit mode
+	private bool isDragging = false; 
 
 	private CameraFollower CameraCtrl;
+	private LineRendererArrow ArrowDraw;
+
+	private Rigidbody ballBody;
+
+	public AnimationCurve throwingCurve;
+
 
 	public void Start()
 	{
 		CameraCtrl = this.gameObject.GetComponent<CameraFollower>();
+		ArrowDraw = this.gameObject.GetComponent<LineRendererArrow>();
+		ballBody = this.gameObject.GetComponent<Rigidbody>();
 	}
 
 	private void FixedUpdate()
 	{//TODO - convert this! It should use the modern input system.
-
-		bool APressed = Input.GetKey(KeyCode.A);
-		bool DPressed = Input.GetKey(KeyCode.D);
-
-
-		if (DPressed)
+		if(IsClicking())
 		{
-			//havePills();
-			CameraCtrl.CameraAngle += CameraSensitivity*Time.deltaTime;
-		}
-		if(APressed)
-		{
-			CameraCtrl.CameraAngle -= CameraSensitivity * Time.deltaTime;
-		}
-		if(Input.GetKey(KeyCode.Space))
-		{
+			if(!isDragging) //se if we're tapping the car or not
+			{
+				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				RaycastHit hit = new RaycastHit();
+				if (Physics.Raycast(ray, out hit, TouchRayCastDist)) 
+				{
+					Debug.Log("Hit " + hit.transform.name);
+					if (hit.transform == this.transform)
+					{
+						isDragging = true;
+						Debug.Log("Now dragging!");
+					}
+				}
+				if(!isDragging) //we are still not dragging the ball. thus, camera control.
+				{
 
-			AttemptToHitBall(); //wow cool name nerd why don't you attempt to hit some ass for once
+					float AngleValueChange = Input.GetAxis("Mouse X") * CamInputScaler;
+					CameraCtrl.CameraAngle += AngleValueChange;
+
+					//Debug.Log("missed!");
+				}
+				//if we're NOT, we are rotating the camera
+			}
+			else//we're actively dragging
+			{
+				if(throwTowards != null)
+				{
+					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+					RaycastHit raycastHit = new RaycastHit();
+					if(Physics.Raycast(ray, out raycastHit, TouchRayCastDist))
+					{ 
+					Vector3 newPt = raycastHit.point;
+					newPt.y = this.transform.position.y;
+					throwTowards.transform.position = newPt;
+					}
+			
+					else
+					{
+					Vector3 newPt = ray.origin + ray.direction * Vector3.Distance(this.transform.position,Camera.main.transform.position);
+					newPt.y = this.transform.position.y;
+					throwTowards.transform.position = newPt;
+					}
+
+
+					ArrowDraw.ArrowOrigin = this.gameObject.transform.position;
+					ArrowDraw.ArrowTarget = throwTowards.transform.position;
+					ArrowDraw.UpdateArrow();
+
+					//float Distance = Vector3.Distance(throwTowards.transform.position, this.transform.position);
+					//Debug.Log("DISTANCE: " + Distance);
+
+
+					//throwTowards.transform.position;
+
+
+				}
+				
+			}
 		}
 		else
 		{
-			//we need to be past around like 80% of the cooldown!!
-			//if(Time.time<NextBallHit)
-				spaceReleased = true;
-		}
+			//no longer clicking.
+			if(isDragging)
+			{
 
-		float ScrlWheel = Input.GetAxis("Mouse ScrollWheel");
-		if (ScrlWheel != 0f)
-			CameraCtrl.CameraYOffset += (ScrlWheel*-1)*CameraScrollModifier;
-		CameraCtrl.CameraYOffset = Mathf.Clamp(CameraCtrl.CameraYOffset, CameraCtrl.MinCameraHeight, CameraCtrl.MaxCameraHeight);
+				isDragging=false;
+				ArrowDraw.Reset();
 
-		}
+				Vector3 throwDir = throwTowards.transform.position - this.transform.position;
+				float Distance = Vector3.Distance(throwTowards.transform.position, this.transform.position);
+				if (Distance > maxThrowDistance)
+					Distance = maxThrowDistance;
+				Debug.Log("DISTANCE: " + Distance);
 
-	private void AttemptToHitBall()
-	{
-		if(canHit())
-		{
-			spaceReleased = false;
-			float dist_away = 1; //shouldn't matter???
+				throwDir.Normalize();
+				Debug.Log(throwDir.magnitude);
 
-			float temp_angle = this.gameObject.GetComponent<CameraFollower>().CameraAngle;
+				float Scaler = (Distance*Distance)*throwScaler;
 
-			float tempAngle = temp_angle * Mathf.PI / 180;
-			float XOffSet = dist_away * Mathf.Cos(tempAngle);// + CameraTarget.transform.position.x;
-			float ZOffset = dist_away * Mathf.Sin(tempAngle);// + CameraTarget.transform.position.z;
 
-			BallHitReference.transform.position = this.gameObject.transform.position + new Vector3(XOffSet, 0, ZOffset);
-			BallHitReference.transform.LookAt(this.gameObject.transform);
-			//we take a hint from the camera follow thing here.
-			//get a vector based on the camera angle - hit it based on that angle / the ballHitSpeed Variable!!
-			//add the force here.
-			Rigidbody currentRig = this.gameObject.GetComponent<Rigidbody>();
-			currentRig.AddForce(BallHitReference.transform.forward * BallHitSpeed);
+				throwDir = throwDir*Scaler;
 
-			//now we handle the base behavior based on what our Enum's set to
-			if(HitModeUsed == HitModes.HitModeNormal)
-			{ //play a hit sound, add delay, remove preset value!
-				NextBallHit = (long)(Time.time + BallHitCooldown);
-				PlayerInfo pinfo = this.gameObject.GetComponent<PlayerInfo>();
-				if (pinfo != null)
-				{
-					pinfo.drainEnergy(BallHitManaDrain);
-					pinfo.HitCount++;
-				}
+				Debug.Log(throwDir.magnitude);
+
+				ballBody.AddForce(throwDir);
+
+
+				//throw ball here!
 			}
-			if(HitModeUsed == HitModes.HitModeConstant)
-			{ //no hitsound, stamina/magic drain is based on deltatime instead!
-				PlayerInfo pinfo = this.gameObject.GetComponent<PlayerInfo>();
-				if(pinfo != null)
-				{
-					pinfo.drainEnergy(BallHitManaDrain*Time.fixedDeltaTime);
-				}
-
-			}
-
 		}
-		else
-		{
-			return;//play a failure noise here.
-		}
+
 	}
 
-	public bool canHit()
+
+	public bool IsClicking() //counts for tapping and dragging, funilly enough
 	{
-		//are we still holding space (and on the classic mode?)
-		if(HitModeUsed == HitModes.HitModeNormal)
+		bool isTouchOrClick = false;
+		foreach (Touch touch in Input.touches)
 		{
-			if (!spaceReleased)
-				return false;
+			isTouchOrClick = true;
 		}
 
-
-		Rigidbody currentRig = this.gameObject.GetComponent<Rigidbody>();
-		if (currentRig != null)
-		{
-			if ((long)Time.time < NextBallHit) { return false; }
-			if (currentRig.IsSleeping())
-				return true;
-			if (currentRig.velocity.magnitude < BallMaxMagnitude)
-				return true;
-			return false;
-		}
-		else return false;
+		if (Input.GetMouseButton(0))
+			isTouchOrClick = true;
+		return isTouchOrClick;
 	}
-
-
-	public enum HitModes //dev
-	{ 
-	HitModeConstant, //doesn't play a hitsound, doesn't use a cooldown asides from the fixed update. 
-	HitModeNormal
-	}
-
-
-
 }
 
 

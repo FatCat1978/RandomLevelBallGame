@@ -45,6 +45,9 @@ public class LevelGenerator : MonoBehaviour
 	public GameObject CAP_SOUTH;
 	public GameObject CAP_WEST;
 
+	[Header("Generated Rooms")]
+	public GameObject generatedEndRoom;
+
 	public GameObject RoomTemplateFromDirs(ArrayList dirs) //TODO, think of a better system for this?? This seems horrendous.
 	{
 		bool exitNorth = false;
@@ -156,7 +159,6 @@ public class LevelGenerator : MonoBehaviour
 	private void VerifyRoomSets()
 	{
 		AllowedToGenerate = true;
-		return; //comment this out 
 
 		bool issues = false;
 		if (StartRoom == null)
@@ -352,6 +354,7 @@ public class LevelGenerator : MonoBehaviour
 
 		//now the end.
 		GameObject theEnd = Instantiate(EndRoom);
+		generatedEndRoom = theEnd;
 		theEnd.transform.parent = this.gameObject.transform;
 		theEnd.transform.position = new Vector3(currentCoords.x * tileSize * roomSize, 0, currentCoords.y * tileSize * roomSize);
 

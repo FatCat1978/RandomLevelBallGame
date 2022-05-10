@@ -19,7 +19,7 @@ public class DamageOnContact : MonoBehaviour
 		{
 			LastDamageTick = Time.time;
 
-			PlayersInfo.takeDamage(DamageDone);
+			
 			
 		}
 	}
