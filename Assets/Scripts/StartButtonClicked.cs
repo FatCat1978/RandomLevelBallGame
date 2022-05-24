@@ -6,18 +6,6 @@ public class StartButtonClicked : MonoBehaviour
 {
 	// Start is called before the first frame update
 	public GameObject ball;
-    public void weAreClicked()
-	{
-		//summon ball
-		print("gay retard");
-	}
-	private void Update()
-	{
-		if(Input.anyKeyDown)
-		{
-			StartGame();
-		}
-	}
 
 	public void StartGame()
 	{
