@@ -1417,7 +1417,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &839709868
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1874,6 +1874,7 @@ GameObject:
   - component: {fileID: 1299021398}
   - component: {fileID: 1299021400}
   - component: {fileID: 1299021399}
+  - component: {fileID: 1299021401}
   m_Layer: 0
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1998,6 +1999,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1299021397}
   m_CullTransparentMesh: 1
+--- !u!114 &1299021401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1299021397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba7fbd6219ffaaf429675f9403b5d376, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PossibleStrings: []
 --- !u!1 &1442322754
 GameObject:
   m_ObjectHideFlags: 0
@@ -2297,6 +2311,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77e3859a22b662e4fb6c79ab18cc61b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  possibleSprites: []
+  UI_INTRO: {fileID: 839709867}
+  UI_DEATH: {fileID: 150006055}
+  UI_LEVELEND: {fileID: 522988026}
 --- !u!4 &1821282737
 Transform:
   m_ObjectHideFlags: 0
