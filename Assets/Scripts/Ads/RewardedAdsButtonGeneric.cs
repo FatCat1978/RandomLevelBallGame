@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Advertisements;
+using UnityEngine.Events;
 
 public class RewardedAdsButtonGeneric : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListener
 {
@@ -9,6 +10,7 @@ public class RewardedAdsButtonGeneric : MonoBehaviour, IUnityAdsLoadListener, IU
     [SerializeField] string _iOSAdUnitId = "IOS_Rewarded";
     string _adUnitId = null; // This will remain null for unsupported platforms
 
+    [SerializeField] UnityEvent callOnAdSuccess;
     void Awake()
     {
         // Get the Ad Unit ID for the current platform:
@@ -20,13 +22,25 @@ public class RewardedAdsButtonGeneric : MonoBehaviour, IUnityAdsLoadListener, IU
 
         //Disable the button until the ad is ready to show:
         _showAdButton.interactable = false;
+
+
     }
 
-    // Load content to the Ad Unit:
-    public void LoadAd()
+
+	public void OnEnable()
+	{
+        LoadAd();
+	}
+	// Load content to the Ad Unit:
+
+
+
+	public void LoadAd()
     {
         // IMPORTANT! Only load content AFTER initialization (in this example, initialization is handled in a different script).
-        Debug.Log("Loading Ad: " + "What the fuck");
+        Debug.Log("Loading Ad: " + _adUnitId);
+        if (_adUnitId == null)
+            _adUnitId = _androidAdUnitId;
         Advertisement.Load(_adUnitId, this);
     }
 
@@ -65,9 +79,9 @@ public class RewardedAdsButtonGeneric : MonoBehaviour, IUnityAdsLoadListener, IU
             //this needs more reading into. in the meantime...
 
             //actual reward code here
-            Debug.Log("Spawning a new pup");
 
 
+            callOnAdSuccess.Invoke();
             // Load another ad:
             Advertisement.Load(_adUnitId, this);
         }

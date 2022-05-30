@@ -22,7 +22,7 @@ public class LevelGenerator : MonoBehaviour
 
 	ArrayList AllRoomInfo = new ArrayList();
 
-
+	public GameObject startNewBallHandler;
 
 	public GameObject PLUS_ROOM;
 	[Header("Room Templates")]	
@@ -462,9 +462,11 @@ public class LevelGenerator : MonoBehaviour
 	{
 		foreach (Transform child in this.transform)
 		{
-			GameObject.Destroy(child.gameObject);
+			Destroy(child.gameObject);
 		}
 		GenerateLevel();
+
+
 	}
 
 	public ArrayList getRoomsFromCoords(Vector2Int coordsOfRoom) //todo, return an array of X size

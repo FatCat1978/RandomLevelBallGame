@@ -38,7 +38,7 @@ public class PlayerController : MonoBehaviour
 		ballBody = this.gameObject.GetComponent<Rigidbody>();
 	}
 
-	private void FixedUpdate()
+	private void Update()
 	{//TODO - convert this! It should use the modern input system.
 		if(IsClicking())
 		{

@@ -5,14 +5,15 @@ using UnityEngine;
 public class StartButtonClicked : MonoBehaviour
 {
 	// Start is called before the first frame update
-	public GameObject ball;
 
 	public void StartGame()
 	{
-		GameObject newBall = Instantiate(ball);
-		ball.transform.parent = null;
-		ball.transform.position = new Vector3(0,50,0);
+		BallManager ballManager = GameObject.Find("BallManager").GetComponent<BallManager>();
+		if (ballManager != null)
+			ballManager.StartLevelHandler();
+		GameObject UImanagerObj = GameObject.Find("UIManager");
+		UIManager uIManager = UImanagerObj.GetComponent<UIManager>();
+		uIManager.change_state(UIManager.UIStates.GAMEPLAY);
 
-		Destroy(this.gameObject);
 	}
 }
