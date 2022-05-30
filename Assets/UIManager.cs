@@ -22,7 +22,6 @@ public class UIManager : MonoBehaviour
 
 	public void change_state(UIStates newstate)
 	{
-		Debug.Log("Setting UI state to:" + newstate);
 		switch(newstate)
 		{
 			case UIStates.INTRO:

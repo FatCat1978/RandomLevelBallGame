@@ -55,7 +55,7 @@ public void LoadAll()
             highScore = totalScore;
         totalScore = 0;
 
-
+    SaveAll();
     //and then we can reset the level.
     
 

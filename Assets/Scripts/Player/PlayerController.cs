@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class PlayerController : MonoBehaviour
 {
@@ -28,11 +29,14 @@ public class PlayerController : MonoBehaviour
 
 	private Rigidbody ballBody;
 
+	private PlayerInfo playerInfo;
+
 	public AnimationCurve throwingCurve;
 
 
 	public void Start()
 	{
+		playerInfo = this.gameObject.GetComponent<PlayerInfo>();
 		CameraCtrl = this.gameObject.GetComponent<CameraFollower>();
 		ArrowDraw = this.gameObject.GetComponent<LineRendererArrow>();
 		ballBody = this.gameObject.GetComponent<Rigidbody>();
@@ -48,11 +52,9 @@ public class PlayerController : MonoBehaviour
 				RaycastHit hit = new RaycastHit();
 				if (Physics.Raycast(ray, out hit, TouchRayCastDist)) 
 				{
-					Debug.Log("Hit " + hit.transform.name);
 					if (hit.transform == this.transform)
 					{
 						isDragging = true;
-						Debug.Log("Now dragging!");
 					}
 				}
 				if(!isDragging) //we are still not dragging the ball. thus, camera control.
@@ -61,7 +63,6 @@ public class PlayerController : MonoBehaviour
 					float AngleValueChange = Input.GetAxis("Mouse X") * CamInputScaler;
 					CameraCtrl.CameraAngle += AngleValueChange;
 
-					//Debug.Log("missed!");
 				}
 				//if we're NOT, we are rotating the camera
 			}
@@ -114,19 +115,22 @@ public class PlayerController : MonoBehaviour
 				float Distance = Vector3.Distance(throwTowards.transform.position, this.transform.position);
 				if (Distance > maxThrowDistance)
 					Distance = maxThrowDistance;
-				Debug.Log("DISTANCE: " + Distance);
+
 
 				throwDir.Normalize();
-				Debug.Log(throwDir.magnitude);
-
 				float Scaler = (Distance*Distance)*throwScaler;
 
 
 				throwDir = throwDir*Scaler;
 
-				Debug.Log(throwDir.magnitude);
 
 				ballBody.AddForce(throwDir);
+
+				//TODO, change pitch to relate to how "hard" the ball was hit. barely any distance? high pitch. low pitch for high distances etc. make it feel meaty.
+				AudioSource AS = GetComponent<AudioSource>();
+				AS.pitch = Random.Range(.5f, 1.5f);
+				AS.Play();
+				playerInfo.HitCount++;
 
 
 				//throw ball here!

@@ -28,15 +28,29 @@ public class PointTowardsTarget : MonoBehaviour
     {
         if (!target || !lineRenderer)
             return;
-        float adjY = target.transform.position.z-this.transform.position.z; 
-        float adjX = target.transform.position.x-this.transform.position.x;
+        //we need to convert everything to 2d in order to properly make things work.
+        float adjY = target.transform.position.z-this.transform.position.z; //y is z!
+        float adjX = target.transform.position.x-this.transform.position.x;//X is still X
+
+        //get the distance. if it's shorter than lineDist, it's our new lineDist.
+        Vector2 DistCalcA = new Vector2(this.transform.position.x, this.transform.position.z); 
+        Vector2 DistCalcB = new Vector2(target.transform.position.x, target.transform.position.z);
+
+        float RendererdLineDist = lineDist;
+
+        float Dist = Vector2.Distance(DistCalcA, DistCalcB);
+        if (Dist < lineDist)
+            RendererdLineDist = Dist;
+
         float angle = Mathf.Atan2(adjY,adjX);
 
         float x0 = this.transform.position.x;
         float y0 = this.transform.position.z;
 
-        float x = x0 + lineDist*Mathf.Cos(angle);        
-        float y = y0 + lineDist*Mathf.Sin(angle);
+        float x = x0 + RendererdLineDist*Mathf.Cos(angle);        
+        float y = y0 + RendererdLineDist*Mathf.Sin(angle);
+
+
 
         Vector3 lineEndPos = new Vector3(x,this.transform.position.y,y);
 

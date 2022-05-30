@@ -5,11 +5,16 @@ using UnityEngine;
 public class BallManager : MonoBehaviour
 {
 	[SerializeField] GameObject ballTemplate;
-	[SerializeField] LevelGenerator LevelGeneratorinst;
+	LevelGenerator LevelGeneratorinst;
 	[SerializeField] UIManager UIManagerinst;
 
 	private GameObject currentBall; //there can only be one of these at a time.
 
+	private void Start()
+	{
+		GameObject LevelGenerator = GameObject.Find("LevelGenerator");
+		LevelGeneratorinst = LevelGenerator.GetComponent<LevelGenerator>();
+	}
 	public void NextLevelHandler()
 	{
 		GameObject PPMO = GameObject.Find("SaveManager");

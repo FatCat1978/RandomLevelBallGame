@@ -48,6 +48,8 @@ public class LevelGenerator : MonoBehaviour
 	[Header("Generated Rooms")]
 	public GameObject generatedEndRoom;
 
+	private int generationiters = 0; 
+
 	public GameObject RoomTemplateFromDirs(ArrayList dirs) //TODO, think of a better system for this?? This seems horrendous.
 	{
 		bool exitNorth = false;
@@ -185,7 +187,7 @@ public class LevelGenerator : MonoBehaviour
 	{
 		if (!AllowedToGenerate)
 		{
-			print("Good job retard!");
+			print("Good job idiot!");
 			return;
 		}
 
@@ -195,6 +197,7 @@ public class LevelGenerator : MonoBehaviour
 		//only can move east/west/north - south can't happen except for tangents
 		
 		Directions lastNextDir = Directions.North; //what this is is the direction the LAST room had to take in order to get to the current one!
+		Debug.Log("Desired Complexity is: " + desiredLevelComplexity);
 		for (int i = 0; i < desiredLevelComplexity; i++)
 		{
 			RoomGenInfo newRoom = new RoomGenInfo();
@@ -415,8 +418,10 @@ public class LevelGenerator : MonoBehaviour
 
 		foreach(RoomGenInfo newRoom in AllRoomInfo)
 		{
+			Debug.Log("wow!");
 			GameObject Hehehehaw = Instantiate(RoomTemplateFromDirs(newRoom.exits));
 			Hehehehaw.transform.SetParent(this.transform);
+			Hehehehaw.transform.name = "ROOM GENERATED IN ITERATION:" + generationiters;
 			
 
 			Hehehehaw.transform.position = new Vector3(newRoom.x * tileSize * roomSize, 0, newRoom.y*tileSize*roomSize);
@@ -458,12 +463,21 @@ public class LevelGenerator : MonoBehaviour
 		
 	}
 
+
+	public void delete_level()
+	{
+		foreach (Transform child in this.gameObject.transform)
+		{
+			UnityEngine.Object.Destroy(child.gameObject);
+
+		}
+		AllRoomInfo = new ArrayList();
+	}
+
 	public void RegenerateLevel()
 	{
-		foreach (Transform child in this.transform)
-		{
-			Destroy(child.gameObject);
-		}
+		delete_level();
+
 		GenerateLevel();
 
 
