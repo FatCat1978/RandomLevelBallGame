@@ -2,12 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(AudioSource))]
 public class ItemPickup : MonoBehaviour
 {
     public int ScoreOnPickup;
     public GameObject spawnOnPickup;
 	private bool hasBeenPicked = false;
 
+	public AudioClip pickupSound;
+
+	private void Start()
+	{
+		AudioSource audioSource = GetComponent<AudioSource>();
+		if (audioSource != null)
+		{
+			audioSource.clip = pickupSound;
+		}
+	}
 	private void OnTriggerEnter(Collider other)
 	{
 		GameObject potentialPlayer = other.gameObject;
@@ -15,6 +26,7 @@ public class ItemPickup : MonoBehaviour
 		if (PlayersInfo != null && !hasBeenPicked)
 		{
 			hasBeenPicked = true;
+			GetComponent<AudioSource>().Play();	
 			PlayersInfo.currentScore += ScoreOnPickup;
 			preDestroy();
 		}

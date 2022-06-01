@@ -418,7 +418,6 @@ public class LevelGenerator : MonoBehaviour
 
 		foreach(RoomGenInfo newRoom in AllRoomInfo)
 		{
-			Debug.Log("wow!");
 			GameObject Hehehehaw = Instantiate(RoomTemplateFromDirs(newRoom.exits));
 			Hehehehaw.transform.SetParent(this.transform);
 			Hehehehaw.transform.name = "ROOM GENERATED IN ITERATION:" + generationiters;
