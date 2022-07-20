@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ScoreOnPickup: 0
-  spawnOnPickup: {fileID: 0}
+  spawnOnPickup: {fileID: 4581774973694550076, guid: 04785e858f0ceb64b8a8b14010eaf1be, type: 3}
   followSpeed: 12
   shrinkspeed: 2
   pickupSound: {fileID: 8300000, guid: 7bb5948fa74d6b8498ece2ea072915cc, type: 3}
